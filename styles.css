@@ -1,0 +1,11 @@
+.vc-lastfm-stats-item-pill-container {
+    height: 0;
+    top: 0;
+}
+
+.vc-lastfm-stats-item-button-container > div > div > div > svg > foreignObject {
+    background:
+        url("https://www.last.fm/static/images/lastfm_logo_facebook.png") center/contain no-repeat,
+        linear-gradient(#E4141E, #E4141E);
+    overflow: hidden;
+}
