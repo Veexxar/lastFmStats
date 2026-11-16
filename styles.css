@@ -1,11 +1,366 @@
-.vc-lastfm-stats-item-pill-container {
-    height: 0;
-    top: 0;
+.vc-lastfm-stats-server-item {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
 }
 
-.vc-lastfm-stats-item-button-container > div > div > div > svg > foreignObject {
-    background:
-        url("https://www.last.fm/static/images/lastfm_logo_facebook.png") center/contain no-repeat,
-        linear-gradient(#E4141E, #E4141E);
+.vc-lastfm-stats-server-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--guildbar-avatar-size, 40px);
+    height: var(--guildbar-avatar-size, 40px);
+    padding: 0;
+    border-radius: 12px;
+    background: #d51007;
+    color: #fff;
+    cursor: pointer;
+    transition:
+        filter 0.15s,
+        transform 0.15s;
+}
+
+.vc-lastfm-stats-server-button:hover {
+    filter: brightness(1.15);
+}
+
+.vc-lastfm-stats-server-button:active {
+    transform: translateY(1px);
+}
+
+.vc-lastfm-stats-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-default);
+}
+
+.vc-lastfm-stats-page a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.vc-lastfm-stats-message {
+    padding: 40px 16px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-error {
+    color: var(--text-feedback-critical);
+}
+
+.vc-lastfm-stats-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-lastfm-stats-title,
+.vc-lastfm-stats-subtitle {
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-lastfm-stats-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+.vc-lastfm-stats-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-meta {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-now-playing {
+    color: var(--status-positive);
+    font-weight: 600;
+}
+
+.vc-lastfm-stats-now-playing::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: currentcolor;
+    animation: vc-lastfm-stats-pulse 1.6s ease-in-out infinite;
+}
+
+/* Artwork: the box reserves its space so nothing shifts while images load */
+.vc-lastfm-stats-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--background-mod-strong);
+    font-size: 22px;
+}
+
+.vc-lastfm-stats-art-round {
+    border-radius: 50%;
+}
+
+.vc-lastfm-stats-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Header */
+.vc-lastfm-stats-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--background-base-lower);
+}
+
+.vc-lastfm-stats-header > .vc-lastfm-stats-art {
+    width: 72px;
+    font-size: 32px;
+}
+
+.vc-lastfm-stats-username {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-strong) !important;
+}
+
+.vc-lastfm-stats-username:hover {
+    text-decoration: underline !important;
+}
+
+.vc-lastfm-stats-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-stat strong {
+    color: var(--text-strong);
+    font-weight: 600;
+}
+
+.vc-lastfm-stats-latest {
+    width: 260px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--background-mod-subtle);
+}
+
+.vc-lastfm-stats-latest:hover {
+    background: var(--background-mod-strong);
+}
+
+.vc-lastfm-stats-latest-label {
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.vc-lastfm-stats-latest-label:not(.vc-lastfm-stats-now-playing) {
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-latest-track {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Tabs and period picker */
+.vc-lastfm-stats-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-lastfm-stats-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.vc-lastfm-stats-tab {
+    padding: 10px 14px;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.vc-lastfm-stats-tab:hover {
+    color: var(--text-default);
+}
+
+.vc-lastfm-stats-tab-active {
+    border-bottom-color: #d51007;
+    color: var(--text-strong);
+}
+
+.vc-lastfm-stats-periods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.vc-lastfm-stats-period {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--background-mod-subtle);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.vc-lastfm-stats-period:hover {
+    background: var(--background-mod-strong);
+    color: var(--text-default);
+}
+
+.vc-lastfm-stats-period-active,
+.vc-lastfm-stats-period-active:hover {
+    background: #d51007;
+    color: #fff;
+}
+
+/* Lists */
+.vc-lastfm-stats-list {
+    display: grid;
+    gap: 8px;
+    transition: opacity 0.15s;
+}
+
+.vc-lastfm-stats-stale {
+    opacity: 0.5;
+}
+
+.vc-lastfm-stats-cards {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.vc-lastfm-stats-friends {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.vc-lastfm-stats-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--background-base-lower);
+}
+
+.vc-lastfm-stats-row > :not(.vc-lastfm-stats-row-bar) {
+    position: relative;
+}
+
+/* Play count relative to the most played track */
+.vc-lastfm-stats-row-bar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--background-mod-subtle);
+    pointer-events: none;
+}
+
+.vc-lastfm-stats-row[href]:hover,
+.vc-lastfm-stats-card[href]:hover {
+    background: var(--background-mod-strong);
+}
+
+.vc-lastfm-stats-rank {
+    width: 28px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.vc-lastfm-stats-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--background-base-lower);
+}
+
+.vc-lastfm-stats-card-art {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.vc-lastfm-stats-card-art .vc-lastfm-stats-art {
+    width: 100%;
+    font-size: 48px;
+}
+
+.vc-lastfm-stats-card-rank {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    min-width: 22px;
+    padding: 2px 6px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 70%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.vc-lastfm-stats-skeleton {
+    height: 64px;
+    border-radius: 8px;
+    background: var(--background-base-lower);
+    animation: vc-lastfm-stats-pulse 1.2s ease-in-out infinite;
+}
+
+.vc-lastfm-stats-cards > .vc-lastfm-stats-skeleton {
+    height: auto;
+    aspect-ratio: 3 / 4;
+}
+
+@keyframes vc-lastfm-stats-pulse {
+    50% {
+        opacity: 0.45;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-lastfm-stats-skeleton,
+    .vc-lastfm-stats-now-playing::before {
+        animation: none;
+    }
 }
