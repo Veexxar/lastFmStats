@@ -3,6 +3,7 @@ import "./styles.css";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { classNameFactory } from "@utils/css";
+import { promptToRestart } from "@utils/promptToRestart";
 import definePlugin from "@utils/types";
 import { Modal, openModal, Tooltip, useEffect, useMemo, useState } from "@webpack/common";
 import { ReactNode } from "react";
@@ -107,6 +108,33 @@ interface ArtProps {
     fallback?: () => Promise<string>;
 }
 
+const checkedImageHosts = new Set<string>();
+
+/**
+ * Called when an image fails to load. If its host is not allowed by Vencord's
+ * CSP (e.g. Last.fm moved its CDN again), ask the user to allow it once and
+ * offer a restart, which is what makes new CSP rules take effect.
+ */
+async function ensureImageHostAllowed(url: string) {
+    let host: string;
+    try {
+        host = new URL(url).host;
+    } catch {
+        return;
+    }
+    if (checkedImageHosts.has(host)) return;
+    checkedImageHosts.add(host);
+
+    if (await VencordNative.csp.isDomainAllowed(url, ["img-src"])) return;
+
+    const result = await VencordNative.csp.requestAddOverride(url, ["img-src"], "LastFMStats");
+    if (result === "ok") {
+        promptToRestart("relaunch", {
+            subtitle: "Restart Discord so Last.fm images can load."
+        });
+    }
+}
+
 function Art({ src, glyph, round, fallback }: ArtProps) {
     const [resolved, setResolved] = useState(src);
 
@@ -122,7 +150,10 @@ function Art({ src, glyph, round, fallback }: ArtProps) {
     return (
         <div className={cl("art", { "art-round": round })}>
             {resolved
-                ? <img src={resolved} alt="" loading="lazy" decoding="async" onError={() => setResolved("")} />
+                ? <img src={resolved} alt="" loading="lazy" decoding="async" onError={() => {
+                    ensureImageHostAllowed(resolved);
+                    setResolved("");
+                }} />
                 : <span aria-hidden="true">{glyph}</span>}
         </div>
     );
@@ -517,7 +548,7 @@ function ServerListButton() {
                         aria-label="Last.fm Stats"
                         onClick={openStatsModal}
                     >
-                        <LastFMLogo size={24} />
+                        <LastFMLogo size={22} />
                     </button>
                 )}
             </Tooltip>
