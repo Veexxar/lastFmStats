@@ -1,7 +1,37 @@
+/* Server list button, styled like Discord's own guild bar actions
+   ("Add a Server", "Discover"): neutral tile with a coloured glyph that
+   fills with the brand colour on hover, plus the white side pill. */
 .vc-lastfm-stats-server-item {
+    --vc-lastfm-red: #d51007;
+
+    position: relative;
     display: flex;
     justify-content: center;
+    width: 100%;
     margin-bottom: 8px;
+}
+
+.vc-lastfm-stats-server-item::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 4px;
+    height: 0;
+    border-radius: 0 4px 4px 0;
+    background: var(--interactive-text-active, var(--interactive-active, #fff));
+    opacity: 0;
+    transform: translateY(-50%);
+    transition:
+        height 0.15s ease-out,
+        opacity 0.15s ease-out;
+    pointer-events: none;
+}
+
+.vc-lastfm-stats-server-item:hover::before,
+.vc-lastfm-stats-server-item:focus-within::before {
+    height: 20px;
+    opacity: 1;
 }
 
 .vc-lastfm-stats-server-button {
@@ -11,17 +41,25 @@
     width: var(--guildbar-avatar-size, 40px);
     height: var(--guildbar-avatar-size, 40px);
     padding: 0;
+    border: none;
     border-radius: 12px;
-    background: #d51007;
-    color: #fff;
+    background: var(--background-mod-subtle, rgb(78 80 88 / 30%));
+    color: var(--vc-lastfm-red);
     cursor: pointer;
     transition:
-        filter 0.15s,
-        transform 0.15s;
+        background-color 0.15s ease-out,
+        color 0.15s ease-out;
 }
 
-.vc-lastfm-stats-server-button:hover {
-    filter: brightness(1.15);
+.vc-lastfm-stats-server-button:hover,
+.vc-lastfm-stats-server-button:focus-visible {
+    background: var(--vc-lastfm-red);
+    color: #fff;
+}
+
+.vc-lastfm-stats-server-button:focus-visible {
+    outline: 2px solid var(--focus-primary, #00b0f4);
+    outline-offset: 2px;
 }
 
 .vc-lastfm-stats-server-button:active {
